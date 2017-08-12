@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Controllers;
 
 use Nwidart\Modules\Routing\Controller;
@@ -68,11 +67,9 @@ class BaseController extends Controller
     public function __construct(Theme $theme, Filesystem $file)
     {
         $this->setDependencies($theme, $file);
-
         if (method_exists($this, 'boot')) {
             $this->boot();
         }
-
         // start a debug timer going
         class_exists('Debugbar') && app()->environment() !== 'testing'
             ? \Debugbar::startMeasure('module_timer', 'Module Run')
@@ -89,18 +86,15 @@ class BaseController extends Controller
     public function setDependencies(Theme $theme, Filesystem $file)
     {
         $this->file = $file;
-
         // set some theme options up
         if (!isset($this->themeName)) {
             $this->themeName = config('cms.core.app.themes.frontend', 'default');
         }
-
         try {
             $this->theme = $theme->uses($this->themeName)->layout($this->layout);
         } catch (\Teepluss\Theme\UnknownThemeException $e) {
             $this->theme = $theme->uses('default')->layout($this->layout);
         }
-
         // figure out which module we are currently in
         $this->module = $this->getModule($this);
     }
@@ -120,10 +114,8 @@ class BaseController extends Controller
     {
         $namespace = get_class($class);
         $module = explode('\\', $namespace);
-
         $module[2] = app('modules')->find(strtolower($module[2]));
         view()->share('_module', $module);
-
         return $module[2];
     }
 
@@ -139,14 +131,11 @@ class BaseController extends Controller
         if ($theme === null) {
             return false;
         }
-
         if ($this->theme->exists($theme)) {
             $this->themeName = $theme;
             $this->theme->uses($theme);
-
             return true;
         }
-
         return false;
     }
 
@@ -159,8 +148,7 @@ class BaseController extends Controller
         if (!is_object($this->theme)) {
             return false;
         }
-        $this->theme->prependTitle($title.$seperator);
-
+        $this->theme->prependTitle($title . $seperator);
         return true;
     }
 
@@ -176,28 +164,24 @@ class BaseController extends Controller
         if ($layout === null) {
             return false;
         }
-
         $layoutFile = sprintf(
             '%s/%s/layouts/%s.blade.php',
             public_path(config('theme.themeDir')),
             $this->themeName,
             $layout
         );
-
         if ($this->file->exists($layoutFile)) {
             $this->layout = $layout;
             $this->theme->layout($layout);
-
             return true;
         }
-
         return false;
     }
 
     /**
      * Returns a valid namespace string for the module.
      *
-     * @param string $var    The config var
+     * @param string $var The config var
      * @param string $module Overloads the module to use this name instead
      *
      * @return string
@@ -205,11 +189,9 @@ class BaseController extends Controller
     public function getModuleNamespace($var = null, $module = null)
     {
         $module = strtolower($module === null ? $this->module : $module);
-
         if ($var !== null) {
             return sprintf('%s::%s', $module, $var);
         }
-
         return $module;
     }
 
@@ -217,14 +199,13 @@ class BaseController extends Controller
      * Determines where to load the view from.
      *
      * @param string $view Path to the view file
-     * @param array  $data Data to pass through to the view
+     * @param array $data Data to pass through to the view
      * @param string $type Where the view is [Module, Theme, App, Custom]
      */
     public function setView($view, $data = [], $type = 'module')
     {
         $type = strtolower($type);
         $supportedTypes = ['theme', 'app', 'module', 'custom'];
-
         if (!in_array($type, $supportedTypes) && substr($type, 0, 6) !== 'module') {
             $type = 'watch';
         } else {
@@ -232,15 +213,12 @@ class BaseController extends Controller
                 case 'theme':
                     $type = 'scope';
                     break;
-
                 case 'app':
                     $type = 'of';
                     break;
-
                 case 'custom':
                     $type = 'load';
                     break;
-
                 default:
                 case $type === 'module' || substr($type, 0, 6) === 'module':
                     $module = strtolower($this->module);
@@ -249,37 +227,30 @@ class BaseController extends Controller
                         $module = $type[1];
                         $type = $type[0];
                     }
-
                     $type = 'of';
                     $view = $this->getModuleNamespace($view, $module);
                     break;
             }
         }
-
         $this->view = $view;
         $this->data = $data;
         $this->type = $type;
-
         return $this->theme->$type(partial($this->view), $this->data)->render();
     }
 
     public function outputMethod()
     {
         $call = debug_backtrace(); //presume last call?
-
         $class = $call[1]['class'];
         $method = $call[1]['function'];
         $method = new \ReflectionMethod($class, str_replace(array($class, '::'), '', $method));
-
         $filename = $call[0]['file'];
         $start_line = $method->getStartLine() - 1; // it's actually - 1, otherwise you wont get the function() block
         $end_line = $method->getEndLine();
         $length = $end_line - $start_line;
-
         $source = file($filename);
         $body = implode('', array_slice($source, $start_line, $length));
-
-        echo '<pre><code>',print_r($body, true),'</code></pre>';
+        echo '<pre><code>', print_r($body, true), '</code></pre>';
         echo '<hr />';
     }
 
@@ -323,7 +294,6 @@ class BaseController extends Controller
         if (!$this->auth()->guest()) {
             return app('Dingo\Api\Dispatcher')->be($this->auth()->user());
         }
-
         return app('Dingo\Api\Dispatcher');
     }
 
@@ -341,11 +311,9 @@ class BaseController extends Controller
         $callable = [
             'user', 'auth', 'response',
         ];
-
         if (in_array($key, $callable) && method_exists($this, $key)) {
             return $this->$key();
         }
-
-        throw new ErrorException('Undefined property '.get_class($this).'::'.$key);
+        throw new ErrorException('Undefined property ' . get_class($this) . '::' . $key);
     }
 }

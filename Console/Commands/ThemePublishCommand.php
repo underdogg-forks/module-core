@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -20,7 +19,6 @@ class ThemePublishCommand extends Command
     public function __construct()
     {
         parent::__construct();
-
         $this->registerFile();
     }
 
@@ -34,7 +32,6 @@ class ThemePublishCommand extends Command
         if ($name = $this->argument('theme')) {
             return $this->publishTheme($name);
         }
-
         $this->publishAll();
     }
 
@@ -45,7 +42,6 @@ class ThemePublishCommand extends Command
         if (!count($dirs)) {
             return;
         }
-
         foreach ($dirs as $dir) {
             $this->publishTheme(class_basename($dir));
         }
@@ -57,13 +53,10 @@ class ThemePublishCommand extends Command
         $assetDir = config('theme.containerDir.asset');
         $themeAssetDir = [$themeDir, $name, $assetDir];
         $publicAssetDir = [public_path('themes'), $name];
-
         $this->line("<info>Published</info>: {$name}");
-
         if ($this->option('force', false)) {
             $this->file->cleanDirectory(implode($publicAssetDir, DIRECTORY_SEPARATOR));
         }
-
         $this->file->copyDirectory(implode($themeAssetDir, DIRECTORY_SEPARATOR), implode($publicAssetDir, DIRECTORY_SEPARATOR));
     }
 

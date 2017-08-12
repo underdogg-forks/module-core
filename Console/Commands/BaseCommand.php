@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -22,7 +21,6 @@ class BaseCommand extends Command
     public function __construct()
     {
         parent::__construct();
-
         $this->app = app();
     }
 
@@ -35,13 +33,13 @@ class BaseCommand extends Command
     {
         parent::comment('');
         parent::comment('-------------------------------------');
-        parent::info(' '.$this->getModuleName().' - '.$string);
+        parent::info(' ' . $this->getModuleName() . ' - ' . $string);
         parent::comment('');
     }
 
     public function comment($string, $verbosity = null)
     {
-        parent::comment("\n".$string);
+        parent::comment("\n" . $string);
     }
 
     public function header()
@@ -49,7 +47,7 @@ class BaseCommand extends Command
         parent::comment('');
         parent::comment('=====================================');
         parent::comment('');
-        parent::info(' '.$this->getModuleName().' ');
+        parent::info(' ' . $this->getModuleName() . ' ');
         parent::comment('');
         parent::comment('-------------------------------------');
         parent::comment('');
@@ -62,13 +60,11 @@ class BaseCommand extends Command
                 $this->comment(sprintf('Migrating %s Package...', array_get($settings, 'name', '')));
                 $this->call('migrate', array('--package' => $pkg));
             }
-
             if (array_get($settings, 'seed', false) == true && array_get($settings, 'seedclass', false) !== false) {
                 $this->comment(sprintf('Seeding %s Package...', array_get($settings, 'name', '')));
                 $this->call('db:seed', array('--class' => array_get($settings, 'seedclass')));
             }
-
-            if (array_get($settings, 'config', false) == true && !empty($pkg) && !File::exists(base_path().'/app/config/packages/'.$pkg)) {
+            if (array_get($settings, 'config', false) == true && !empty($pkg) && !File::exists(base_path() . '/app/config/packages/' . $pkg)) {
                 $this->comment(sprintf('Publishing %s Config...', array_get($settings, 'name', '')));
                 $this->call('config:publish', array('package' => $pkg));
             } else {

@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Models;
 
 use Cms\Modules\Core\Traits\LinkableTrait;
@@ -34,7 +33,6 @@ class BaseModel extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-
         self::linkableConstructor();
     }
 
@@ -58,15 +56,12 @@ class BaseModel extends Model
         if (!isset($this->fillable)) {
             return $this->fill(Request::all());
         }
-
         if (empty($input)) {
             $input = Request::only($this->fillable);
         } else {
             $input = array_only($input, $this->fillable);
         }
-
         $input = array_filter($input, 'strlen');
-
         return $this->fill($input);
     }
 
@@ -76,7 +71,6 @@ class BaseModel extends Model
     public function getCallerType()
     {
         list(, , $module, , $model) = explode('\\', __CLASS__);
-
         return sprintf('%s_%s', $module, $model);
     }
 

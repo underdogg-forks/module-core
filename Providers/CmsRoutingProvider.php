@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -56,10 +55,9 @@ abstract class CmsRoutingProvider extends ServiceProvider
     private function loadFrontendRoutes(Router $router)
     {
         $routes = $this->getFrontendRoute();
-
         if ($routes && file_exists($routes)) {
             $router->group([
-                'namespace' => $this->namespace.'\Frontend',
+                'namespace' => $this->namespace . '\Frontend',
                 'prefix' => config('cms.core.app.paths.frontend', '/'),
                 'middleware' => config('cms.core.app.middleware.frontend', []),
             ], function (Router $router) use ($routes) {
@@ -74,10 +72,9 @@ abstract class CmsRoutingProvider extends ServiceProvider
     private function loadBackendRoutes(Router $router)
     {
         $routes = $this->getBackendRoute();
-
         if ($routes && file_exists($routes)) {
             $router->group([
-                'namespace' => $this->namespace.'\Backend',
+                'namespace' => $this->namespace . '\Backend',
                 'prefix' => config('cms.core.app.paths.backend', 'admin/'),
                 'middleware' => config('cms.core.app.middleware.backend', []),
             ], function (Router $router) use ($routes) {
@@ -92,11 +89,10 @@ abstract class CmsRoutingProvider extends ServiceProvider
     private function loadApiRoutes(ApiRouter $router)
     {
         $routes = $this->getApiRoute();
-
         if ($routes && file_exists($routes)) {
             $router->group([
                 'version' => 'v1',
-                'namespace' => $this->namespace.'\Api',
+                'namespace' => $this->namespace . '\Api',
                 'prefix' => config('cms.core.app.paths.api', 'api/'),
                 'middleware' => config('cms.core.app.middleware.api', []),
             ], function (ApiRouter $router) use ($routes) {

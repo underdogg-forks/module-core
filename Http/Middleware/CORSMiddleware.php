@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Middleware;
 
 use Closure;
@@ -10,7 +9,7 @@ class CORSMiddleware
      * Minify HTML.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param \Closure $next
      *
      * @return mixed
      */
@@ -19,7 +18,6 @@ class CORSMiddleware
         if (config('cms.core.app.api.cors', 'false') === 'false') {
             return $next($request);
         }
-
         $response = $next($request);
         if (!($response instanceof \Illuminate\Http\Response) && $request->is(config('cms.core.app.paths.api', 'api/'))) {
             $response
@@ -27,7 +25,6 @@ class CORSMiddleware
                 ->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
                 ->header('Access-Control-Allow-Headers', 'X-Auth-Token');
         }
-
         return $response;
     }
 }

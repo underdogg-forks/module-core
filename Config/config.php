@@ -1,5 +1,4 @@
 <?php
-
 return [
     'table-prefix' => 'core_',
     'date-format' => 'd-m-Y h:i:s',

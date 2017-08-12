@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Database\Seeders;
 
 use Carbon\Carbon;
@@ -16,7 +15,6 @@ class NavTableSeeder extends Seeder
     {
         with(new NavigationLink())->truncate();
         with(new Navigation())->truncate();
-
         $navs = [
             [
                 'name' => 'main-menu',
@@ -25,11 +23,9 @@ class NavTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
         ];
-
         foreach ($navs as $r) {
             with(new Navigation())->fill($r)->save();
         }
-
         $navLinks = [
             [
                 'navigation_id' => 1,
@@ -42,9 +38,7 @@ class NavTableSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-
         ];
-
         foreach ($navLinks as $r) {
             with(new NavigationLink())->fill($r)->save();
         }

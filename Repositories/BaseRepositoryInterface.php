@@ -1,7 +1,5 @@
 <?php
-
 namespace Cms\Modules\Core\Repositories;
-
 interface BaseRepositoryInterface
 {
     public function getModel();

@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Middleware;
 
 use Closure;
@@ -10,7 +9,7 @@ class MinifyHtmlMiddleware
      * Minify HTML.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param \Closure $next
      *
      * @return mixed
      */
@@ -19,7 +18,6 @@ class MinifyHtmlMiddleware
         if (app()->environment() === 'local' || config('cms.core.app.minify-html', 'false') === 'false') {
             return $next($request);
         }
-
         // make sure we are a Response and not json etc
         $response = $next($request);
         if ($response instanceof \Illuminate\Http\Response) {
@@ -28,7 +26,6 @@ class MinifyHtmlMiddleware
             if (!is_string($buffer)) {
                 return $response;
             }
-
             $re = '%# Collapse whitespace everywhere but in blacklisted elements.
             (?>             # Match all whitespans other than single space.
             [^\S ]\s*     # Either one [\t\r\n\f\v] and zero or more ws,
@@ -48,18 +45,14 @@ class MinifyHtmlMiddleware
             )             # End alternation group.
             )  # If we made it here, we are not in a blacklist tag.
             %Six';
-
             // do the replacements
             $buffer = preg_replace($re, ' ', $buffer);
-
             //if we end up with null, the string was too big to process so just return the orig response
             if ($buffer === null) {
                 return $response;
             }
-
             $response->setContent($buffer);
         }
-
         return $response;
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -80,7 +79,6 @@ class BaseModuleProvider extends ServiceProvider
         if (!count($this->middleware)) {
             return;
         }
-
         foreach ($this->middleware as $module => $middlewares) {
             if (!count($middlewares)) {
                 continue;
@@ -100,16 +98,13 @@ class BaseModuleProvider extends ServiceProvider
         if (!count($this->commands)) {
             return;
         }
-
         foreach ($this->commands as $module => $commands) {
             if (!count($commands)) {
                 continue;
             }
-
             foreach ($commands as $command => $class) {
                 $this->app[$command] = $this->app->share(function () use ($module, $class) {
                     $class = sprintf('Cms\Modules\%s\Console\Commands\%s', $module, $class);
-
                     return new $class($this->app);
                 });
                 $this->commands($command);
@@ -125,12 +120,10 @@ class BaseModuleProvider extends ServiceProvider
         if (!count($this->bindings)) {
             return;
         }
-
         foreach ($this->bindings as $namespace => $classes) {
             if (!count($classes)) {
                 continue;
             }
-
             foreach ($classes as $class => $bindAs) {
                 $this->app->bind(
                     implode('\\', [$namespace, $class]),
@@ -148,17 +141,14 @@ class BaseModuleProvider extends ServiceProvider
         if (!count($this->composers)) {
             return;
         }
-
         foreach ($this->composers as $module => $composers) {
             if (!count($composers)) {
                 continue;
             }
-
             foreach ($composers as $class => $views) {
                 if (!is_array($views)) {
                     $views = [$views];
                 }
-
                 $class = sprintf('Cms\Modules\%1$s\Composers\%2$s', $module, $class);
                 view()->composer($views, $class);
             }

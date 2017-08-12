@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -16,13 +15,12 @@ class CoreCreateConfigTable extends Migration
      */
     public function up()
     {
-        Schema::create($this->prefix.'config', function (Blueprint $table) {
+        Schema::create($this->prefix . 'config', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->string('environment');
             $table->string('group')->nullable();
             $table->string('item')->nullable();
             $table->text('value')->nullable();
-
             $table->unique(['environment', 'group', 'item']);
         });
     }
@@ -32,6 +30,6 @@ class CoreCreateConfigTable extends Migration
      */
     public function down()
     {
-        Schema::drop($this->prefix.'config');
+        Schema::drop($this->prefix . 'config');
     }
 }

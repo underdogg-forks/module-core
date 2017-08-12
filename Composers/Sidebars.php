@@ -1,7 +1,5 @@
 <?php
-
 namespace Cms\Modules\Core\Composers;
-
 class Sidebars
 {
     public function left($view)
@@ -17,21 +15,17 @@ class Sidebars
     private function getMenuList($side)
     {
         $menus = [];
-
-        foreach (get_array_column(config('cms'), 'sidebars.'.$side) as $module => $sets) {
+        foreach (get_array_column(config('cms'), 'sidebars.' . $side) as $module => $sets) {
             if (!count($sets)) {
                 continue;
             }
-
             foreach ($sets as $set => $views) {
                 $menus[$set] = !empty($menus[$set]) ? array_merge_recursive($menus[$set], $views) : $views;
             }
         }
-
         foreach ($menus as $set => $views) {
             $this->sortMenu($menus[$set]);
         }
-
         return $menus;
     }
 

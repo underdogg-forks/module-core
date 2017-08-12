@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This setting can be controlled from the admin panel.
  * In the interest of keeping this dynamic, don't directly overload it,

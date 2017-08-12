@@ -1,10 +1,7 @@
 <?php
-
 return [
-
     'left' => [
         'default' => [
         ],
     ],
-
 ];

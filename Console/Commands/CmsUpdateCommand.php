@@ -1,7 +1,5 @@
 <?php
-
 namespace Cms\Modules\Core\Console\Commands;
-
 class CmsUpdateCommand extends CmsInstallCommand
 {
     protected $name = 'cms:update';
@@ -11,25 +9,18 @@ class CmsUpdateCommand extends CmsInstallCommand
     public function fire()
     {
         $this->cmd = $this->option('verbose') ? 'call' : 'callSilent';
-
         $this->info('Updating...');
-
         $this->do_clearCompiled();
-
         $this->do_themePublish();
-
         $this->do_modulePublish();
         $this->do_modulePublishConfig();
         $this->do_modulePublishPermissions();
         $this->do_modulePublishTranslations();
-
         $this->do_modulePublishMigrations();
         $this->do_migrate();
-
         $this->do_cacheClear();
         $this->do_autoload();
         $this->do_optimize();
-
         $this->done();
     }
 

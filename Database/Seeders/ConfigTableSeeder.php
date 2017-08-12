@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -13,7 +12,6 @@ class ConfigTableSeeder extends Seeder
     public function run()
     {
         with(new Core\Models\DBConfig())->truncate();
-
         $environment = app()->environment();
         $array = [
             [
@@ -56,7 +54,7 @@ class ConfigTableSeeder extends Seeder
                 'environment' => $environment,
                 'group' => 'cms.core.app.themes',
                 'item' => 'backend',
-                'value' => 'adminlte',
+                'value' => 'admin_coreui',
             ],
             [
                 'environment' => $environment,
@@ -101,7 +99,6 @@ class ConfigTableSeeder extends Seeder
                 'value' => '["api/*"]',
             ],
         ];
-
         foreach ($array as $r) {
             with(new Core\Models\DBConfig())->fill($r)->save();
         }

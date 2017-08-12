@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -16,15 +15,13 @@ class CoreCreateNavTables extends Migration
      */
     public function up()
     {
-        Schema::create($this->prefix.'navigation', function (Blueprint $table) {
+        Schema::create($this->prefix . 'navigation', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->string('name');
             $table->string('class');
-
             $table->timestamps();
         });
-
-        Schema::create($this->prefix.'navigation_links', function (Blueprint $table) {
+        Schema::create($this->prefix . 'navigation_links', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->integer('navigation_id')->unsigned()->index();
             $table->string('title');
@@ -33,7 +30,6 @@ class CoreCreateNavTables extends Migration
             $table->string('class')->nullable()->default(null);
             $table->boolean('blank')->default(false);
             $table->integer('order')->default(0);
-
             $table->timestamps();
         });
     }
@@ -43,7 +39,7 @@ class CoreCreateNavTables extends Migration
      */
     public function down()
     {
-        Schema::drop($this->prefix.'navigation_links');
-        Schema::drop($this->prefix.'navigation');
+        Schema::drop($this->prefix . 'navigation_links');
+        Schema::drop($this->prefix . 'navigation');
     }
 }

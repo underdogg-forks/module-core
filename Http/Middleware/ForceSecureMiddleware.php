@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Middleware;
 
 use Closure;
@@ -11,7 +10,7 @@ class ForceSecureMiddleware
      * Force Secure on the CMS.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param \Closure $next
      *
      * @return mixed
      */
@@ -20,11 +19,9 @@ class ForceSecureMiddleware
         if (config('cms.core.app.force-secure', 'false') === 'false') {
             return $next($request);
         }
-
         if (Request::secure() === false) {
             return redirect()->secure(Request::path());
         }
-
         return $response;
     }
 }

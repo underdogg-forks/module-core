@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Models;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -20,18 +19,16 @@ class Theme implements Arrayable, Jsonable, JsonSerializable
         if (count(self::$themes)) {
             return;
         }
-
         // get a list of theme directories
         $themeDir = public_path(config('theme.themeDir'));
         $directories = File::directories($themeDir);
         foreach ($directories as $dir) {
-            if (!File::isFile($dir.'/theme.json')) {
+            if (!File::isFile($dir . '/theme.json')) {
                 continue;
             }
-            $options = json_decode(File::get($dir.'/theme.json'), true);
+            $options = json_decode(File::get($dir . '/theme.json'), true);
             $options['dir'] = class_basename($dir);
-
-            self::$themes[$dir] = (object) array_only($options, ['name', 'author', 'site', 'type', 'dir', 'version']);
+            self::$themes[$dir] = (object)array_only($options, ['name', 'author', 'site', 'type', 'dir', 'version']);
         }
     }
 
@@ -43,7 +40,6 @@ class Theme implements Arrayable, Jsonable, JsonSerializable
     public static function all()
     {
         self::gatherInfo();
-
         return self::$themes;
     }
 
@@ -55,7 +51,6 @@ class Theme implements Arrayable, Jsonable, JsonSerializable
     public static function getFrontend()
     {
         self::gatherInfo();
-
         return array_filter(self::$themes, function ($theme) {
             return $theme->type == 'frontend';
         });
@@ -69,7 +64,6 @@ class Theme implements Arrayable, Jsonable, JsonSerializable
     public static function getBackend()
     {
         self::gatherInfo();
-
         return array_filter(self::$themes, function ($theme) {
             return $theme->type == 'backend';
         });
@@ -84,19 +78,15 @@ class Theme implements Arrayable, Jsonable, JsonSerializable
     {
         $theme = self::themeInfo(config('cms.core.app.themes.frontend', 'default'));
         $dir = key($theme);
-
         if (!File::isDirectory($dir)) {
             return [];
         }
-
-        $files = File::glob($dir.'/layouts/*.blade.php');
+        $files = File::glob($dir . '/layouts/*.blade.php');
         $files = array_map(function ($filename) {
             $fn = explode('/', $filename);
-
             return str_replace('.blade.php', '', end($fn));
         }, $files);
         $files = array_diff($files, ['default']);
-
         return $files;
     }
 
@@ -108,7 +98,6 @@ class Theme implements Arrayable, Jsonable, JsonSerializable
     private static function themeInfo($name)
     {
         self::gatherInfo();
-
         return array_filter(self::$themes, function ($theme) use ($name) {
             return $theme->dir == $name;
         });
@@ -118,10 +107,12 @@ class Theme implements Arrayable, Jsonable, JsonSerializable
     {
         return self::$themes->toArray();
     }
+
     public function toJson($options = 0)
     {
         return self::$themes->toJson($options);
     }
+
     public function jsonSerialize()
     {
         return self::$themes->jsonSerialize();

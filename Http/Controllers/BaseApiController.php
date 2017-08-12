@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Controllers;
 
 use Dingo\Api\Routing\Helpers;
@@ -17,7 +16,7 @@ class BaseApiController extends BaseController
      * Alias method for sending an response back.
      *
      * @param string $message
-     * @param int    $status  HTTP Status Code
+     * @param int $status HTTP Status Code
      */
     public function sendResponse($message = 'ok', $status = 200, $data = [])
     {
@@ -25,11 +24,9 @@ class BaseApiController extends BaseController
             'message' => $message,
             'status_code' => $status,
         ];
-
         if (!empty($data)) {
             $reply['data'] = $data;
         }
-
         return $this->response->array($reply)->setStatusCode($status);
     }
 
@@ -37,7 +34,7 @@ class BaseApiController extends BaseController
      * Alias method for sending an error status back.
      *
      * @param string $message
-     * @param int    $status  HTTP Status Code
+     * @param int $status HTTP Status Code
      */
     public function sendError($message, $status = 500)
     {
@@ -48,7 +45,7 @@ class BaseApiController extends BaseController
      * Alias method for sending an ok status back.
      *
      * @param string $message
-     * @param int    $status  HTTP Status Code
+     * @param int $status HTTP Status Code
      */
     public function sendOK($message, $status = 200)
     {

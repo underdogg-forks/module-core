@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Middleware;
 
 use Closure;
@@ -10,7 +9,6 @@ class MenuMiddleware
     public function handle($request, Closure $next)
     {
         app(MenuService::class)->boot();
-
         return $next($request);
     }
 }

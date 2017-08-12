@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Console\Commands;
 
 use Carbon\Carbon;
@@ -15,41 +14,31 @@ class CmsInstallCommand extends BaseCommand
     public function fire()
     {
         $this->header();
-
         $this->cmd = $this->option('verbose') ? 'call' : 'callSilent';
-
         // test for db connectivity
         if ($this->do_dbCheck() === false) {
             $this->error('Database Details seem to be invalid, you need to fix this before we can continue...');
-
             return;
         }
-
         if ($this->confirm(' This command will (re)build your database! Continue? ', true) === false) {
             $this->done();
-
             return;
         }
-
         $this->do_clearCompiled();
         $this->do_cacheClear();
         $this->do_keyGenerate();
         $this->do_migrateCheck();
         $this->do_clearMigrationPath();
-
         $this->do_modulePublish();
         $this->do_modulePublishTranslations();
         $this->do_modulePublishConfig();
-
         $this->do_modulePublishMigrations();
         $this->do_migrate();
-
         $this->do_moduleProcessing();
         $this->do_installAdmin();
         $this->do_cacheClear();
         $this->do_autoload();
         $this->do_optimize();
-
         $this->done();
     }
 
@@ -68,7 +57,6 @@ class CmsInstallCommand extends BaseCommand
         } catch (\PDOException $e) {
             return false;
         }
-
         return true;
     }
 
@@ -91,10 +79,8 @@ class CmsInstallCommand extends BaseCommand
             \DB::connection()->getDatabaseName();
         } catch (\PDOException $e) {
             $this->error('Database Details seem to be invalid, cannot run migrations...');
-
             return false;
         }
-
         try {
             $this->{$this->cmd}('migrate', ['--force' => null]);
         } catch (Exception $e) {
@@ -108,7 +94,6 @@ class CmsInstallCommand extends BaseCommand
         if (!Schema::hasTable('migrations')) {
             return false;
         }
-
         // just run a reset
         $this->comment('Migrating all the new things!...');
         $this->{$this->cmd}('migrate:reset');
@@ -139,10 +124,8 @@ class CmsInstallCommand extends BaseCommand
             \DB::connection()->getDatabaseName();
         } catch (\PDOException $e) {
             $this->error('Database Details seem to be invalid, cannot continue...');
-
             return false;
         }
-
         try {
             $this->{$this->cmd}('module:publish-permissions');
         } catch (\PDOException $e) {
@@ -174,13 +157,11 @@ class CmsInstallCommand extends BaseCommand
         if (!count($objModules->enabled())) {
             return;
         }
-
         foreach ($objModules->getOrdered() as $module) {
             if (!$module->enabled()) {
                 continue;
             }
-            $this->info($module->getName().' module...');
-
+            $this->info($module->getName() . ' module...');
             $this->do_modulesDependencyInstallers($module);
             $this->do_modulesSeeding($module);
         }
@@ -225,45 +206,35 @@ class CmsInstallCommand extends BaseCommand
         if ($this->option('no-interaction') !== false) {
             return;
         }
-
         $this->info('Building Admin User...');
-
         $data = [
             'name' => null,
             'username' => null,
             'email' => null,
             'password' => null,
         ];
-
         $data['name'] = $this->ask('What is your full name?');
         $data['username'] = $this->ask('What is your user name?');
         $data['email'] = $this->ask('What is your email?');
         $data['password'] = $this->secret('Please enter your password');
-
         if ($this->secret('Please enter your password for confirmation') !== $data['password']) {
             $this->error('Could not verify password, exiting here');
-
             return;
         }
-
         // add some data tot the array
         $data['verified_at'] = Carbon::now();
         $data['role'] = 1;
-
         // grab the auth model
         $userModel = config('cms.auth.config.user_model');
-
         // spawn a new copy and fill with the data details
         $user = with(new $userModel());
         $user->fill(array_except($data, 'role'));
         $save = $user->save();
-
         // if we cant save throw out the errors
         if ($save === false) {
             print_r($user->getErrors());
             die();
         }
-
         // attach the admin role to this user
         $user->roles()->attach(
             array_get($data, 'role'),

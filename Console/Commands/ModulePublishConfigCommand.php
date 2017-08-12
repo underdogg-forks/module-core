@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -16,11 +15,9 @@ class ModulePublishConfigCommand extends Command
         $options = [
             '--provider' => 'Cms\Modules\Core\Providers\CoreModuleServiceProvider',
         ];
-
         if ($this->option('force', false)) {
             $options['--force'] = null;
         }
-
         $this->call('vendor:publish', $options);
         $this->call('cache:clear');
     }

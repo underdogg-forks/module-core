@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -22,7 +21,6 @@ class DumpAutoloadCommand extends Command
     public function __construct()
     {
         parent::__construct();
-
         $this->boot();
     }
 

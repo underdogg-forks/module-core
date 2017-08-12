@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
@@ -33,17 +32,14 @@ class BaseBackendController extends BaseController
     {
         // reset the themeName to whatever is in the config
         $this->setTheme(config('cms.core.app.themes.backend', 'default_admin'));
-
         // then add the control panel stuff
         $this->addPageAssets();
-
         parent::boot();
     }
 
     public function setActions(array $actions)
     {
         $this->actions = $actions;
-
         $this->theme->setActions($actions);
     }
 
@@ -56,19 +52,17 @@ class BaseBackendController extends BaseController
             return;
         }
         $routeName = Route::current()->getName();
-
         $path = sprintf('%s/themes/%s/assets/css/%s.css', public_path(), $this->themeName, $routeName);
-
         if (File::exists($path)) {
-            $this->theme->asset()->add($routeName, str_replace(public_path().'/', '', $path), array('base'));
+            $this->theme->asset()->add($routeName, str_replace(public_path() . '/', '', $path), array('base'));
         }
     }
 
     /**
      * Will send a message back to the browser, if ajax will return as json.
      *
-     * @param string  $message
-     * @param int     $status
+     * @param string $message
+     * @param int $status
      * @param Request $input
      *
      * @return json|Redirect
@@ -81,7 +75,6 @@ class BaseBackendController extends BaseController
                 'message' => $message,
             ];
         }
-
         return redirect()->back($status)->withInfo($message);
     }
 }

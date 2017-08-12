@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -13,8 +12,7 @@ class CoreDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
-        $this->call(__NAMESPACE__.'\ConfigTableSeeder');
-        $this->call(__NAMESPACE__.'\NavTableSeeder');
+        $this->call(__NAMESPACE__ . '\ConfigTableSeeder');
+        $this->call(__NAMESPACE__ . '\NavTableSeeder');
     }
 }

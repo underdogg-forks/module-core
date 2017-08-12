@@ -1,7 +1,5 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Controllers;
-
 class BaseFrontendController extends BaseController
 {
     /**
@@ -19,7 +17,6 @@ class BaseFrontendController extends BaseController
         if ($this->sidebar === null) {
             $this->setSidebar('default');
         }
-
         parent::boot();
     }
 

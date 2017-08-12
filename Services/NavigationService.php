@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Services;
 
 use Cms\Modules\Core\Models\Navigation;
@@ -11,12 +10,10 @@ class NavigationService
     {
         // setup the navs from the DB
         $this->setupDBNavs();
-
         // apply the bootstrap styling to the list navs
         $this->applyListNavs([
             'frontend_user_controlpanel',
         ]);
-
         $this->stylizeInlineNavs();
     }
 
@@ -26,21 +23,17 @@ class NavigationService
             ->with('links')
             ->has('links')
             ->get();
-
         // make sure we have a navigation first
         if (!$navigation->count()) {
             return;
         }
-
         $callback = function ($children, $item) {
             $url = $item->url;
             if ($item->route !== null && !empty($item->route)) {
                 $url = route($item->route);
             }
-
             $children->add($url, $item->title);
         };
-
         $navigation->each(function ($nav) use ($callback) {
             Menu::handler($nav->name)
                 ->class($nav->class)
@@ -55,12 +48,10 @@ class NavigationService
                 ->addClass('list-group no-style')
                 ->getItemsByContentType('Menu\Items\Contents\Link')
                 ->map(function ($item) {
-
                     $class = 'list-group-item';
                     if ($item->isActive()) {
                         $class .= ' active';
                     }
-
                     $item
                         ->setElement(null)
                         ->getContent()
@@ -80,7 +71,6 @@ class NavigationService
         $menuKeys = array_filter($menuKeys, function ($name) {
             return preg_match('/(back|front)end_.*_menu/', $name);
         });
-
         foreach ($menuKeys as $key) {
             Menu::handler($key)->addClass('nav nav-list');
         }

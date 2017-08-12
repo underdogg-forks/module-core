@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Controllers\Frontend;
 
 use Cms\Modules\Core\Http\Controllers\BaseFrontendController;

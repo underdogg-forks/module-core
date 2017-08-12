@@ -1,19 +1,20 @@
 @if (isset($id))
 
-<textarea id="txt_{{ $id }}" name="{{ $id }}" class="form-control" rows="10" tabindex="{{ $tabindex or '1' }}">{!! $content or '' !!}</textarea>
+  <textarea id="txt_{{ $id }}" name="{{ $id }}" class="form-control" rows="10"
+            tabindex="{{ $tabindex or '1' }}">{!! $content or '' !!}</textarea>
 
-@if ($errors->has($id))
+  @if ($errors->has($id))
 
     {!! $errors->first($id, '<span class="help-block">:message</span>') !!}
 
-@endif
+  @endif
 
 
-<script type="text/javascript">
-(function () {
-    jQuery('textarea#txt_{{ $id }}').pagedownBootstrap({
+  <script type="text/javascript">
+    (function () {
+      jQuery('textarea#txt_{{ $id }}').pagedownBootstrap({
         'sanatize': false
-    });
-})();
-</script>
+      });
+    })();
+  </script>
 @endif

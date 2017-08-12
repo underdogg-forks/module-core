@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Providers;
 
 use Nwidart\Modules\Module;
@@ -24,14 +23,11 @@ class CoreModuleServiceProvider extends BaseModuleProvider
     protected $commands = [
         'Core' => [
             'dump-autoload' => 'DumpAutoloadCommand',
-
             'cms:install' => 'CmsInstallCommand',
             'cms:update' => 'CmsUpdateCommand',
             'cms:module:make' => 'CmsModuleMakeCommand',
-
             'themes:gulp' => 'ThemeGulpCommand',
             'themes:publish' => 'ThemePublishCommand',
-
             'module:publish-config' => 'ModulePublishConfigCommand',
         ],
     ];
@@ -56,7 +52,6 @@ class CoreModuleServiceProvider extends BaseModuleProvider
      * @var array
      */
     protected $bindings = [
-
     ];
 
     public function register()
@@ -86,7 +81,7 @@ class CoreModuleServiceProvider extends BaseModuleProvider
     {
         $this->app['view']->addNamespace(
             $module->getLowerName(),
-            $module->getPath().'/Resources/views'
+            $module->getPath() . '/Resources/views'
         );
     }
 
@@ -99,7 +94,7 @@ class CoreModuleServiceProvider extends BaseModuleProvider
     {
         $this->app['translator']->addNamespace(
             $module->getLowerName(),
-            $module->getPath().'/Resources/lang'
+            $module->getPath() . '/Resources/lang'
         );
     }
 
@@ -110,17 +105,13 @@ class CoreModuleServiceProvider extends BaseModuleProvider
      */
     private function registerConfigNamespace(Module $module)
     {
-        $files = $this->app['files']->files($module->getPath().'/Config');
-
+        $files = $this->app['files']->files($module->getPath() . '/Config');
         $package = $module->getLowerName();
-
         foreach ($files as $file) {
             $filename = $this->getConfigFilename($file, $package);
-
             $this->mergeConfigFrom($file, $filename);
-
             $this->publishes([
-                $file => config_path($filename.'.php'),
+                $file => config_path($filename . '.php'),
             ]);
         }
     }
@@ -134,7 +125,6 @@ class CoreModuleServiceProvider extends BaseModuleProvider
     private function getConfigFilename($file, $module)
     {
         $name = preg_replace('/\\.[^.\\s]{3,4}$/', '', basename($file));
-
         return sprintf('cms.%s.%s', $module, $name);
     }
 }

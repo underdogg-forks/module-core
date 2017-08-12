@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -15,15 +14,12 @@ class CmsModulesProvider extends ServiceProvider
             $this->app->register('Barryvdh\Debugbar\ServiceProvider');
             AliasLoader::getInstance()->alias('Debugbar', 'Barryvdh\Debugbar\Facade');
         }
-
         $this->app->register('Nwidart\Modules\LaravelModulesServiceProvider');
-
         // if social module installed, load the socialite service provider
         $class = 'Cms\Modules\Social\Providers\RegisterSocialitesProvider';
         if (class_exists($class)) {
             $this->app->register($class);
         }
-
         BladeExtender::attach($this->app);
     }
 }

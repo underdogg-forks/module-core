@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Services;
 
 use Illuminate\Contracts\Foundation\Application;
@@ -17,7 +16,6 @@ class BladeExtender
             if ($method == 'attach') {
                 continue;
             }
-
             $blade->extend(function ($value) use ($app, $class, $blade, $method) {
                 return $class->$method($value, $app, $blade);
             });
@@ -31,7 +29,6 @@ class BladeExtender
     {
         $matcher = '/@menu\s*\([\'"]([a-zA-Z0-9._-]*)[\'"]\)/';
         $replace = '<?php echo Menu::handler(\'$1\')->render(); ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -42,7 +39,6 @@ class BladeExtender
     {
         $matcher = '/@(break|continue)\s*(?:\((.*)\))\s*/';
         $replace = '<?php if ($2) { $1; } ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -53,7 +49,6 @@ class BladeExtender
     {
         $matcher = '/@(break|continue)/';
         $replace = '<?php $1; ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -65,7 +60,6 @@ class BladeExtender
     {
         $matcher = '/(?<!\w)(\s*)@set\s*\(\s*\${0,1}[\'\"\s]*(.*?)[\'\"\s]*,\s*([\W\w^]*?)\)$/m';
         $replace = '$1<?php \$$2 = $3; ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -81,17 +75,13 @@ class BladeExtender
         $docRoot = array_filter($docRoot);
         array_pop($docRoot);
         $docRoot = implode('/', $docRoot);
-
         // grab the path to current blade file
         $filePath = $blade->getPath();
         $filePath = str_replace('\\', '/', $filePath);
-
         // replace the project root with the blade path and boom
         $filePath = str_replace(array($docRoot, '/~'), '~', $filePath);
-
         $matcher = '/@debug\s*\((.*?)(?:,\s+([^)\],]+))?\)$/m';
         $replace = sprintf('<?php echo \Debug::dump($1, \'%s\'); ?>', $filePath);
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -102,7 +92,6 @@ class BladeExtender
     {
         $matcher = '/@console\s*\((.*?)\)/m';
         $replace = '<?php echo \Debug::console($1); ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -113,7 +102,6 @@ class BladeExtender
     {
         $matcher = '/@authed/';
         $replace = '<?php if (\Auth::check()): ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -124,7 +112,6 @@ class BladeExtender
     {
         $matcher = '/@notauthed/';
         $replace = '<?php if (!\Auth::check()): ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -135,7 +122,6 @@ class BladeExtender
     {
         $matcher = '/@roles\s*\((.*?)\)/';
         $replace = '<?php if (\Auth::check() && \Auth::user()->hasRoles($1)): ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -146,7 +132,6 @@ class BladeExtender
     {
         $matcher = '/@role\s*\((.*?)\)/';
         $replace = '<?php if (\Auth::check() && \Auth::user()->hasRole($1)): ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -158,7 +143,6 @@ class BladeExtender
     {
         $matcher = '/@(hasPermission|permission)\s*\((.*?)\)/';
         $replace = '<?php if (hasPermission($2)): ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 
@@ -169,7 +153,6 @@ class BladeExtender
     {
         $matcher = '/@(endroles|endrole|endauthed|endnotauthed|endhaspermission|endpermission)/i';
         $replace = '<?php endif; ?>';
-
         return preg_replace($matcher, $replace, $value);
     }
 }

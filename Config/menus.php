@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     'backend_sidebar' => [
         '_root' => [
             'order' => 1,
@@ -33,5 +31,4 @@ return [
             'order' => 100,
         ],
     ],
-
 ];

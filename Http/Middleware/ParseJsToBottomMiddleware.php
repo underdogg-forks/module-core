@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Core\Http\Middleware;
 
 use Closure;
@@ -28,7 +27,7 @@ class ParseJsToBottomMiddleware
      * https://github.com/mediarox/pagespeed/blob/e1df909d03379da1dbe3cb43a4da90e69b24a75d/app/code/community/Pagespeed/Js/Model/Observer.php
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param \Closure $next
      *
      * @return mixed
      */
@@ -37,7 +36,6 @@ class ParseJsToBottomMiddleware
         // if (config('cms.core.app.minify-html', 'false') === 'false') {
         //     return $next($request);
         // }
-
         // make sure we are a Response and not json etc
         $response = $next($request);
         if ($response instanceof \Illuminate\Http\Response) {
@@ -46,45 +44,36 @@ class ParseJsToBottomMiddleware
             if (!is_string($buffer)) {
                 return $response;
             }
-
             if (($closedBodyPosition = strripos($buffer, '</body>')) === false) {
                 return $response;
             }
-
             // Search and replace conditional js units.
             $buffer = preg_replace_callback(
                 '#\<\!--\[if[^\>]*>\s*<script.*</script>\s*<\!\[endif\]-->#isU',
                 'self::processHit',
                 $buffer
             );
-
             // Search and replace normal js tags.
             $buffer = preg_replace_callback(
                 '#<script.*</script>#isU',
                 'self::processHit',
                 $buffer
             );
-
             // no JS tags found, throw back the original response
             if (!$this->jsTags) {
                 return $response;
             }
-
             // Remove blank lines from html.
             $buffer = preg_replace('/^\h*\v+/m', '', $buffer);
-
             // Recalculating </body> position, insert js groups right before body ends and set response.
             $closedBodyPosition = strripos($buffer, '</body>');
             $buffer = substr_replace($buffer, $this->jsTags, $closedBodyPosition, 0);
-
             //if we end up with null, the string was too big to process so just return the original response
             if ($buffer === null) {
                 return $response;
             }
-
             $response->setContent($buffer);
         }
-
         return $response;
     }
 
@@ -101,10 +90,8 @@ class ParseJsToBottomMiddleware
         if ($this->isHitExcluded($hits[0])) {
             return $hits[0];
         }
-
         // Add hit to js tag list and return empty string for the replacement.
-        $this->jsTags .= $hits[0]."\n";
-
+        $this->jsTags .= $hits[0] . "\n";
         return '';
     }
 
@@ -119,7 +106,6 @@ class ParseJsToBottomMiddleware
     {
         $c = 0;
         preg_replace($this->excludeList, '', $hit, -1, $c);
-
         return $c > 0;
     }
 }
